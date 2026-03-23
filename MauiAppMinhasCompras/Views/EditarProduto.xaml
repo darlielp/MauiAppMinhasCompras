@@ -2,19 +2,87 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiAppMinhasCompras.Views.EditarProduto"
-             Title="{Binding Descricao}">
+             Title="{Binding Descricao}"
+             BackgroundColor="#F5F5F5">
 
-        <ContentPage.ToolbarItems>
-            <ToolbarItem Text="Salvar" Clicked="ToolbarItem_Clicked"/>
-        </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <ResourceDictionary>
 
-        <VerticalStackLayout Spacing="10" Padding="10">
-            <Label Text="Descrição do Produto:"/>
-            <Entry x:Name="txt_descricao" Text="{Binding Descricao}"/>
-            <Label Text="Quantidade:"/>
-            <Entry x:Name="txt_quantidade" Text="{Binding Quantidade}" Keyboard="Numeric"/>
-            <Label Text="Preço Unitário:"/>
-            <Entry x:Name="txt_preco" Text="{Binding Preco}" Keyboard="Numeric"/>
-        </VerticalStackLayout>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="#222"/>
+                <Setter Property="FontSize" Value="13"/>
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Salvar" Clicked="ToolbarItem_Clicked"/>
+    </ContentPage.ToolbarItems>
+
+    <VerticalStackLayout Padding="15" Spacing="12">
+
+        <Label Text="Descrição" FontAttributes="Bold"/>
+        <Frame CornerRadius="8"
+               Padding="5"
+               BackgroundColor="White"
+               BorderColor="#CCCCCC"
+               HasShadow="False">
+
+            <Entry x:Name="txt_descricao"
+                   Text="{Binding Descricao}"
+                   TextColor="#222"/>
+        </Frame>
+
+        <Label Text="Categoria" FontAttributes="Bold"/>
+        <Frame CornerRadius="8"
+               Padding="5"
+               BackgroundColor="White"
+               BorderColor="#CCCCCC"
+               HasShadow="False">
+
+            <Picker x:Name="picker_categoria"
+                    SelectedItem="{Binding Categoria}"
+                    TextColor="#222">
+                <Picker.Items>
+                    <x:String>Alimentos</x:String>
+                    <x:String>Higiene</x:String>
+                    <x:String>Limpeza</x:String>
+                </Picker.Items>
+            </Picker>
+        </Frame>
+
+        <Label Text="Quantidade" FontAttributes="Bold"/>
+        <Frame CornerRadius="8"
+               Padding="5"
+               BackgroundColor="White"
+               BorderColor="#CCCCCC"
+               HasShadow="False">
+
+            <Entry x:Name="txt_quantidade"
+                   Text="{Binding Quantidade}"
+                   Keyboard="Numeric"
+                   TextColor="#222"/>
+        </Frame>
+
+        <Label Text="Preço Unitário" FontAttributes="Bold"/>
+        <Frame CornerRadius="8"
+               Padding="5"
+               BackgroundColor="White"
+               BorderColor="#CCCCCC"
+               HasShadow="False">
+
+            <Entry x:Name="txt_preco"
+                   Text="{Binding Preco}"
+                   Keyboard="Numeric"
+                   TextColor="#222"/>
+        </Frame>
+        
+        <Label Text="Edite os dados e clique em Salvar"
+               FontSize="12"
+               TextColor="#777"
+               HorizontalTextAlignment="Center"/>
+
+    </VerticalStackLayout>
 
 </ContentPage>

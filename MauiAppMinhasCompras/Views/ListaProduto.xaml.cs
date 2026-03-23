@@ -49,6 +49,8 @@ public partial class ListaProduto : ContentPage
         {
             string q = e.NewTextValue;
 
+            lst_produtos.IsRefreshing = true;
+
             lista.Clear();
 
             List<Produto> tmp = await App.Db.Search(q);
@@ -58,6 +60,9 @@ public partial class ListaProduto : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert("Ops", ex.Message, "OK");
+        } finally
+        {
+            lst_produtos.IsRefreshing = false;
         }
     }
 
@@ -106,6 +111,82 @@ public partial class ListaProduto : ContentPage
         catch (Exception ex)
         {
             DisplayAlert("Ops", ex.Message, "OK");
+        }
+    }
+
+    private async void lst_produtos_Refreshing(object sender, EventArgs e)
+    {
+
+        try
+        {
+            lista.Clear();
+
+            List<Produto> tmp = await App.Db.GetAll();
+
+            tmp.ForEach(i => lista.Add(i));
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
+        }
+        finally
+        {
+            lst_produtos.IsRefreshing = false;
+        }
+
+    }
+
+    private async void CarregarProdutos(string categoria = null)
+    {
+        lista.Clear();
+
+        List<Produto> tmp;
+
+        if (string.IsNullOrEmpty(categoria) || categoria == "Todas")
+        {
+            tmp = await App.Db.GetAll();
+        }
+        else
+        {
+            tmp = await App.Db.GetByCategoria(categoria);
+        }
+
+        tmp.ForEach(i => lista.Add(i));
+    }
+
+
+    private void picker_filtro_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        string categoria = picker_filtro.SelectedItem?.ToString();
+        CarregarProdutos(categoria);
+    }
+
+    private async void ToolbarItem_Clicked_Totais(object sender, EventArgs e)
+    {
+        try
+        {
+            var tmp = await App.Db.GetAll();
+
+            var totais = tmp
+                .GroupBy(p => p.Categoria)
+                .Select(g => new
+                {
+                    Categoria = g.Key,
+                    Total = g.Sum(x => x.Total)
+                });
+
+            string msg = "";
+
+            foreach (var item in totais)
+            {
+                msg += $"{item.Categoria}: {item.Total:C}\n";
+            }
+
+            await DisplayAlert("Total por Categoria", msg, "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
         }
     }
 }
